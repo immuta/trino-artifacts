@@ -1,0 +1,29 @@
+name: Trino artifacts publisher
+on:
+  workflow_dispatch:
+env:
+  ARTIFACT_BUCKET: immuta-platform-artifacts
+  TRINO_RELEASE: 390
+  GH_TOKEN: ${{ github.token }}
+permissions:
+  id-token: write
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v4
+    - name: Configure AWS Creds
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: us-east-1
+        role-to-assume: arn:aws:iam::931788537711:role/github-actions
+    - name: Create and publish release from staging bucket
+      run: |
+        gh release create --repo ${{ github.repository }} ${{ env.TRINO_RELEASE }} --notes ""
+        set -x
+        aws s3 cp s3://${{ env.ARTIFACT_BUCKET }}/trino/${{ env.TRINO_RELEASE }}/immuta-trino-${{ env.TRINO_RELEASE }}.tar.gz .
+        aws s3 cp s3://${{ env.ARTIFACT_BUCKET }}/trino/${{ env.TRINO_RELEASE }}/immuta-trino-${{ env.TRINO_RELEASE }}.tar.gz.sha256 .
+        gh release upload --repo ${{ github.repository }} ${{ env.TRINO_RELEASE }} immuta-trino-${{ env.TRINO_RELEASE }}.tar.gz
+        gh release upload --repo ${{ github.repository }} ${{ env.TRINO_RELEASE }} immuta-trino-${{ env.TRINO_RELEASE }}.tar.gz.sha256
