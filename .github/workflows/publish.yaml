@@ -1,9 +1,10 @@
 name: Trino artifacts publisher
 on:
   workflow_dispatch:
+  push:
 env:
   ARTIFACT_BUCKET: immuta-platform-artifacts
-  TRINO_RELEASE: 390
+  TRINO_RELEASE: 391
   GH_TOKEN: ${{ github.token }}
 permissions:
   id-token: write
