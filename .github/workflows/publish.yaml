@@ -4,7 +4,7 @@ on:
   push:
 env:
   ARTIFACT_BUCKET: immuta-platform-artifacts
-  TRINO_RELEASE: 453-SNAPSHOT
+  TRINO_RELEASE: 453
   GH_TOKEN: ${{ github.token }}
 permissions:
   id-token: write
