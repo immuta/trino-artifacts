@@ -6,7 +6,7 @@ on:
         description: "Trino release version, ie 468"
         type: string
         required: false
-        default: 468
+        default: '468'
       artifact_bucket:
         description: "The S3 bucket to look for the Immuta Trino release artifacts"
         type: string
@@ -14,8 +14,6 @@ on:
         default: 'immuta-platform-artifacts'
   push:
 env:
-  ARTIFACT_BUCKET: ${{ inputs.artifact_bucket }}
-  TRINO_RELEASE: ${{ inputs.release_version }}
   GH_TOKEN: ${{ github.token }}
 permissions:
   id-token: write
@@ -33,9 +31,9 @@ jobs:
         role-to-assume: arn:aws:iam::931788537711:role/github-actions
     - name: Create and publish release from staging bucket
       run: |
-        gh release create --repo ${{ github.repository }} ${{ env.TRINO_RELEASE }} --notes ""
+        gh release create --repo ${{ github.repository }} ${{ inputs.release_version }} --notes ""
         set -x
-        aws s3 cp s3://${{ env.ARTIFACT_BUCKET }}/trino/${{ env.TRINO_RELEASE }}/immuta-trino-${{ env.TRINO_RELEASE }}.tar.gz .
-        aws s3 cp s3://${{ env.ARTIFACT_BUCKET }}/trino/${{ env.TRINO_RELEASE }}/immuta-trino-${{ env.TRINO_RELEASE }}.tar.gz.sha256 .
-        gh release upload --repo ${{ github.repository }} ${{ env.TRINO_RELEASE }} immuta-trino-${{ env.TRINO_RELEASE }}.tar.gz
-        gh release upload --repo ${{ github.repository }} ${{ env.TRINO_RELEASE }} immuta-trino-${{ env.TRINO_RELEASE }}.tar.gz.sha256
+        aws s3 cp s3://${{ inputs.artifact_bucket }}/trino/${{ inputs.release_version }}/immuta-trino-${{ inputs.release_version }}.tar.gz .
+        aws s3 cp s3://${{ inputs.artifact_bucket }}/trino/${{ inputs.release_version }}/immuta-trino-${{ inputs.release_version }}.tar.gz.sha256 .
+        gh release upload --repo ${{ github.repository }} ${{ inputs.release_version }} immuta-trino-${{ inputs.release_version }}.tar.gz
+        gh release upload --repo ${{ github.repository }} ${{ inputs.release_version }} immuta-trino-${{ inputs.release_version }}.tar.gz.sha256
