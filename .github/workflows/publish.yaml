@@ -31,9 +31,9 @@ jobs:
         role-to-assume: arn:aws:iam::931788537711:role/github-actions
     - name: Create and publish release from staging bucket
       run: |
-        gh release create --repo ${{ github.repository }} ${{ inputs.release_version }} --notes ""
+        gh release create --repo ${{ github.repository }} ${{ github.event.inputs.release_version }} --notes ""
         set -x
-        aws s3 cp s3://${{ inputs.artifact_bucket }}/trino/${{ inputs.release_version }}/immuta-trino-${{ inputs.release_version }}.tar.gz .
-        aws s3 cp s3://${{ inputs.artifact_bucket }}/trino/${{ inputs.release_version }}/immuta-trino-${{ inputs.release_version }}.tar.gz.sha256 .
-        gh release upload --repo ${{ github.repository }} ${{ inputs.release_version }} immuta-trino-${{ inputs.release_version }}.tar.gz
-        gh release upload --repo ${{ github.repository }} ${{ inputs.release_version }} immuta-trino-${{ inputs.release_version }}.tar.gz.sha256
+        aws s3 cp s3://${{ github.event.inputs.artifact_bucket }}/trino/${{ github.event.inputs.release_version }}/immuta-trino-${{ github.event.inputs.release_version }}.tar.gz .
+        aws s3 cp s3://${{ github.event.inputs.artifact_bucket }}/trino/${{ github.event.inputs.release_version }}/immuta-trino-${{ github.event.inputs.release_version }}.tar.gz.sha256 .
+        gh release upload --repo ${{ github.repository }} ${{ github.event.inputs.release_version }} immuta-trino-${{ github.event.inputs.release_version }}.tar.gz
+        gh release upload --repo ${{ github.repository }} ${{ github.event.inputs.release_version }} immuta-trino-${{ github.event.inputs.release_version }}.tar.gz.sha256
