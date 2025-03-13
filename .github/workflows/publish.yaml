@@ -5,7 +5,8 @@ on:
       release_version:
         description: "Trino release version, ie 468"
         type: string
-        required: true
+        required: false
+        default: 468
       artifact_bucket:
         description: "The S3 bucket to look for the Immuta Trino release artifacts"
         type: string
