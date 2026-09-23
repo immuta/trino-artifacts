@@ -3,10 +3,10 @@ on:
   workflow_dispatch:
     inputs:
       release_version:
-        description: "Trino release version, ie 468"
+        description: "Trino release version, ie 482"
         type: string
         required: false
-        default: '468'
+        default: '482'
       artifact_bucket:
         description: "The S3 bucket to look for the Immuta Trino release artifacts"
         type: string
